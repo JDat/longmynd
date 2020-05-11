@@ -1,5 +1,5 @@
 BIN = longmynd
-SRC = main.c nim.c ftdi.c stv0910.c stv0910_utils.c stvvglna.c stvvglna_utils.c stv6120.c stv6120_utils.c ftdi_usb.c fifo.c udp.c beep.c ts.c
+SRC = main.c nim.c ftdi.c stv0910.c stv0910_utils.c stvvglna.c stvvglna_utils.c stv6120.c stv6120_utils.c ftdi_usb.c fifo.c udp.c beep.c ts.c i2c_bus.c rpi_i2c.c
 OBJ = ${SRC:.c=.o}
 
 ifndef CC
@@ -37,4 +37,3 @@ tags:
 	@ctags *
 
 .PHONY: all clean
-

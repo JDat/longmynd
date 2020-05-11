@@ -30,7 +30,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "nim.h"
-#include "ftdi.h"
+#include "i2c_bus.h"
 #include "errors.h"
 
 /* -------------------------------------------------------------------------------------------------- */
@@ -63,7 +63,7 @@ uint8_t nim_read_demod(uint16_t reg, uint8_t *val) {
         repeater_on=false;
         err=nim_write_demod(0xf12a,0x38);
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_read_reg16(NIM_DEMOD_ADDR,reg,val);
+    if (err==ERROR_NONE) err=i2c_read_reg16(NIM_DEMOD_ADDR,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: demod read 0x%.4x\n",reg);
 
     /* note we don't turn the repeater off as there might be other r/w to tuner/LNAs */
@@ -85,7 +85,7 @@ uint8_t nim_write_demod(uint16_t reg, uint8_t val) {
         repeater_on=false;
         err=nim_write_demod(0xf12a,0x38);
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_write_reg16(NIM_DEMOD_ADDR,reg,val);
+    if (err==ERROR_NONE) err=i2c_write_reg16(NIM_DEMOD_ADDR,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: demod write 0x%.4x, 0x%.2x\n",reg,val);
 
     return err;
@@ -106,7 +106,7 @@ uint8_t nim_read_lna(uint8_t lna_addr, uint8_t reg, uint8_t *val) {
         err=nim_write_demod(0xf12a,0xb8);
         repeater_on=true;
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_read_reg8(lna_addr,reg,val);
+    if (err==ERROR_NONE) err=i2c_read_reg8(lna_addr,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: lna read 0x%.2x, 0x%.2x\n",lna_addr,reg);
 
     return err;
@@ -127,7 +127,7 @@ uint8_t nim_write_lna(uint8_t lna_addr, uint8_t reg, uint8_t val) {
         err=nim_write_demod(0xf12a,0xb8);
         repeater_on=true;
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_write_reg8(lna_addr,reg,val);
+    if (err==ERROR_NONE) err=i2c_write_reg8(lna_addr,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: lna write 0x%.2x, 0x%.2x,0x%.2x\n",lna_addr,reg,val);
 
     return err;
@@ -147,7 +147,7 @@ uint8_t nim_read_tuner(uint8_t reg, uint8_t *val) {
         err=nim_write_demod(0xf12a,0xb8);
         repeater_on=true;
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_read_reg8(NIM_TUNER_ADDR,reg,val);
+    if (err==ERROR_NONE) err=i2c_read_reg8(NIM_TUNER_ADDR,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: tuner read 0x%.2x\n",reg);
 
     return err;
@@ -167,7 +167,7 @@ uint8_t nim_write_tuner(uint8_t reg, uint8_t val) {
         err=nim_write_demod(0xf12a,0xb8);
         repeater_on=true;
     }
-    if (err==ERROR_NONE) err=ftdi_i2c_write_reg8(NIM_TUNER_ADDR,reg,val);
+    if (err==ERROR_NONE) err=i2c_write_reg8(NIM_TUNER_ADDR,reg,val);
     if (err!=ERROR_NONE) printf("ERROR: tuner write %i,%i\n",reg,val);
 
     return err;

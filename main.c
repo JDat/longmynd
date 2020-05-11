@@ -46,6 +46,7 @@
 #include "udp.h"
 #include "beep.h"
 #include "ts.h"
+#include "i2c_bus.h"
 
 /* -------------------------------------------------------------------------------------------------- */
 /* ----------------- DEFINES ------------------------------------------------------------------------ */
@@ -188,6 +189,7 @@ uint8_t process_command_line(int argc, char *argv[], longmynd_config_t *config) 
     strcpy(config->ts_fifo_path, "longmynd_main_ts");
     config->status_use_ip = false;
     strcpy(config->status_fifo_path, "longmynd_main_status");
+    i2c_bus_type=I2C_BUS_TYPE_FTDI;
     config->polarisation_supply=false;
     char polarisation_str[8];
 
@@ -231,6 +233,11 @@ uint8_t process_command_line(int argc, char *argv[], longmynd_config_t *config) 
             case 'b':
                 config->beep_enabled=true;
                 param--; /* there is no data for this so go back */
+                break;
+            case 'r':
+                i2c_bus_type=I2C_BUS_TYPE_RPI;
+                param--; /* there is no data for this so go back */
+                printf("INFO: Using RPi native I2C bus\n");
                 break;
           }
         }
@@ -667,7 +674,9 @@ int main(int argc, char *argv[]) {
         status_string_write = fifo_status_string_write;
     }
 
-    if (err==ERROR_NONE) err=ftdi_init(longmynd_config.device_usb_bus, longmynd_config.device_usb_addr);
+    if (err==ERROR_NONE) {
+        err=i2c_bus_init(longmynd_config.device_usb_bus, longmynd_config.device_usb_addr);
+    }
 
     thread_vars_t thread_vars_ts = {
         .main_err_ptr = &err,
