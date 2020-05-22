@@ -1,1 +1,0 @@
-cmd_/home/jdat/develop/krnl_drv/dvb_char_driver/datv-module.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/jdat/develop/krnl_drv/dvb_char_driver/datv-module.ko /home/jdat/develop/krnl_drv/dvb_char_driver/datv-module.o /home/jdat/develop/krnl_drv/dvb_char_driver/datv-module.mod.o ;  true
