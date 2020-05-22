@@ -196,6 +196,6 @@ uint8_t rpi_i2c_init () {
     //FIXME: need to pass as command line parameter
     fd = open("/dev/i2c-1", O_RDWR);
     if (fd < 0) { err=-10; }
-    
+    // NIM reset must be here
     return err;
 }
